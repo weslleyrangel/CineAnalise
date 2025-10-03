@@ -1,16 +1,17 @@
-CREATE DATABASE cineanalise CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE cineanalise;
+CREATE DATABASE cineanalise;
+use cineanalise;
 
-CREATE TABLE filmes(
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
-	titulo VARCHAR(200) NOT NULL,
-	sinopse VARCHAR(2000),
-	genero VARCHAR(100),
-	ano INT
+CREATE TABLE IF NOT EXISTS filmes (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(200) NOT NULL,
+    sinopse VARCHAR(2000),
+    genero VARCHAR(100),
+    ano INT
 );
 
-CREATE TABLE analises(
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+-- Criar tabela analises (caso necessário)
+CREATE TABLE IF NOT EXISTS analises (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     filme_id BIGINT NOT NULL,
     texto VARCHAR(2000) NOT NULL,
     nota INT NOT NULL,
@@ -188,4 +189,4 @@ FROM filmes f
 INNER JOIN analises a ON f.id = a.filme_id
 GROUP BY f.id, f.titulo
 ORDER BY media DESC
-LIMIT 5;
+LIMIT 5; 
