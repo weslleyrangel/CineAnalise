@@ -1,10 +1,26 @@
 package com.example.CineAnalise.model;
 
+import jakarta.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "analises")
 public class Analise {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long filmeId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "filme_id")
+    private Filme filme;
+
+    @Column(length = 2000)
     private String texto;
     private Integer nota;
+
+    @OneToMany(mappedBy = "filme", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Analise> analises;
 
     public Analise() {
     }
@@ -17,23 +33,21 @@ public class Analise {
         this.id = id;
     }
 
-    public Long getFilmeId() {
-        return filmeId;
+    public Filme getFilme() {
+        return filme;
     }
 
-    public void setFilmeId(Long filmeId) {
-        this.filmeId = filmeId;
+    public void setFilme(Filme filme) {
+        this.filme = filme;
     }
 
     public String getTexto() {
         return texto;
     }
 
-
     public void setTexto(String texto) {
         this.texto = texto;
     }
-
 
     public Integer getNota() {
         return nota;
@@ -42,4 +56,13 @@ public class Analise {
     public void setNota(Integer nota) {
         this.nota = nota;
     }
+
+    public List<Analise> getAnalises() {
+        return analises;
+    }
+
+    public void setAnalises(List<Analise> analises) {
+        this.analises = analises;
+    }
+
 }
