@@ -32,7 +32,7 @@ public class FilmeController {
             return ResponseEntity.notFound().build();
         }
         Filme filme = filmeOpt.get();
-        filme.setAnalises(analiseRepository.findByFilmeId(id));
+        filme.setAnalises(analiseRepository.findByFilme_Id(id));
         return ResponseEntity.ok(filme);
     }
 
@@ -70,7 +70,7 @@ public class FilmeController {
         if (!filmeRepository.existsById(filmeId)) {
             return ResponseEntity.notFound().build();
         }
-        List<Analise> analises = analiseRepository.findByFilmeId(filmeId);
+        List<Analise> analises = analiseRepository.findByFilme_Id(filmeId);
         return ResponseEntity.ok(analises);
     }
 

@@ -1,6 +1,7 @@
 package com.example.CineAnalise.model;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,7 +19,7 @@ public class Filme {
     private String genero;
     private Integer ano;
     @OneToMany(mappedBy = "filme", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Analise> analises;
+    private List<Analise> analises = new ArrayList<>();
     
     public Filme() {
     }
