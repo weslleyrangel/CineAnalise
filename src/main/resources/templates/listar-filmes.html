@@ -12,8 +12,12 @@
         body { font-family: 'VT323', monospace; background-color: #C0C0C0; color: #000; }
         .window { background-color: #C0C0C0; border: 2px outset #fff; box-shadow: 2px 2px 0px #000; padding: 1rem; }
         .title-bar { background-color: #000080; color: #fff; padding: 4px 8px; font-size: 1.25rem; margin-bottom: 1rem; }
-        .button { background-color: #C0C0C0; border: 2px outset #fff; box-shadow: 1px 1px 0px #000; padding: 0.5rem 1rem; font-size: 1.1rem; }
+        .button { background-color: #C0C0C0; border: 2px outset #fff; box-shadow: 1px 1px 0px #000; padding: 0.5rem 1rem; font-size: 1.1rem; cursor: pointer; text-decoration: none; display: inline-block; color: #000; }
         .button:active { border-style: inset; }
+        .button-danger { background-color: #C00000; color: #fff; }
+        .button-warning { background-color: #FFA500; color: #000; }
+        .filme-card { position: relative; }
+        .filme-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
     </style>
 </head>
 <body class="antialiased">
@@ -27,17 +31,38 @@
     <main class="window">
         <div class="title-bar">Filmes Cadastrados</div>
         <div class="flex justify-end mb-6">
-            <a th:href="@{/filmes/novo}" class="button">Cadastrar Novo Filme</a>
+            <a th:href="@{/filmes/novo}" class="button">➕ Cadastrar Novo Filme</a>
         </div>
+        
+        <div th:if="${#lists.isEmpty(filmes)}" class="text-center p-8">
+            <p class="text-xl mb-4">📽️ Nenhum filme cadastrado ainda.</p>
+            <p>Comece adicionando seu primeiro filme!</p>
+        </div>
+        
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div th:if="${#lists.isEmpty(filmes)}">
-                <p class="col-span-full text-center">Nenhum filme cadastrado.</p>
+            <div th:each="filme : ${filmes}" class="window !p-3 filme-card">
+                <a th:href="@{/filmes/{id}(id=${filme.id})}" class="no-underline text-black block">
+                    <h3 class="text-xl font-bold" style="color:#000080" th:text="${filme.titulo + ' (' + filme.ano + ')'}"></h3>
+                    <p class="text-sm mb-2" th:text="${filme.genero}"></p>
+                    <p th:text="${#strings.abbreviate(filme.sinopse, 100)}"></p>
+                </a>
+                
+                <!-- Botões de Ação -->
+                <div class="filme-actions">
+                    <a th:href="@{/filmes/{id}(id=${filme.id})}" class="button flex-1 text-center">
+                        👁️ Ver Detalhes
+                    </a>
+                    <a th:href="@{/filmes/editar/{id}(id=${filme.id})}" class="button button-warning">
+                        ✏️ Editar
+                    </a>
+                    <form th:action="@{/filmes/deletar/{id}(id=${filme.id})}" method="post" style="display: inline;" 
+                          onsubmit="return confirm('Tem certeza que deseja deletar este filme? Todas as análises serão removidas também.');">
+                        <button type="submit" class="button button-danger">
+                            🗑️ Deletar
+                        </button>
+                    </form>
+                </div>
             </div>
-            <a th:each="filme : ${filmes}" th:href="@{/filmes/{id}(id=${filme.id})}" class="window !p-2 cursor-pointer no-underline text-black">
-                <h3 class="text-xl" style="color:#000080" th:text="${filme.titulo + ' (' + filme.ano + ')'}"></h3>
-                <p class="text-sm mb-2" th:text="${filme.genero}"></p>
-                <p th:text="${#strings.abbreviate(filme.sinopse, 100)}"></p>
-            </a>
         </div>
     </main>
 </div>

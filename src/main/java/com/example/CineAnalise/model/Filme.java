@@ -1,5 +1,6 @@
 package com.example.CineAnalise.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +14,34 @@ public class Filme {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String titulo;
     @Column(length = 2000)
     private String sinopse;
     private String genero;
     private Integer ano;
     @OneToMany(mappedBy = "filme", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Analise> analises = new ArrayList<>();
     
     public Filme() {
+    }
+
+    public Filme(String titulo, String sinopse, String genero, Integer ano) {
+        this.titulo = titulo;
+        this.sinopse = sinopse;
+        this.genero = genero;
+        this.ano = ano;
+    }
+    
+    public void addAnalise(Analise analise){
+        analises.add(analise);
+        analise.setFilme(this);
+    }
+    
+    public void removeAnalise(Analise analise){
+        analises.remove(analise);
+        analise.setFilme(null);
     }
 
     public Long getId() {
@@ -71,5 +91,11 @@ public class Filme {
     public void setAnalises(List<Analise> analises) {
         this.analises = analises;
     }
-}
+
+    @Override
+    public String toString() {
+        return "Filme{" + "id=" + id + ", titulo=" + titulo + ", genero=" + genero + ", ano=" + ano + '}';
+    }
     
+    
+}

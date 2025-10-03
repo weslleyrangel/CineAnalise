@@ -85,7 +85,7 @@ public class FilmeController {
         return ResponseEntity.ok(salvo);
     }
 
-    @PutMapping("/analies/{id}")
+    @PutMapping("/analises/{id}")
     public ResponseEntity<Analise> atualizarAnalise(@PathVariable Long id, @RequestBody Analise analise) {
         return analiseRepository.findById(id)
                 .map(existing -> {
@@ -97,7 +97,7 @@ public class FilmeController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/analies/{id}")
+    @DeleteMapping("/analises/{id}")
     public ResponseEntity<Void> deletarAnalise(@PathVariable Long id) {
         if (!analiseRepository.existsById(id)) {
             return ResponseEntity.notFound().build();

@@ -1,7 +1,7 @@
 package com.example.CineAnalise.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "analises")
@@ -12,17 +12,28 @@ public class Analise {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "filme_id")
+    @JoinColumn(name = "filme_id", nullable = false)
+    @JsonBackReference
     private Filme filme;
 
-    @Column(length = 2000)
+    @Column(length = 2000, nullable = false)
     private String texto;
+
+    @Column(nullable = false)
     private Integer nota;
 
-    @OneToMany(mappedBy = "filme", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Analise> analises;
-
     public Analise() {
+    }
+
+    public Analise(String texto, Integer nota) {
+        this.texto = texto;
+        this.nota = nota;
+    }
+
+    public Analise(Filme filme, String texto, Integer nota) {
+        this.filme = filme;
+        this.texto = texto;
+        this.nota = nota;
     }
 
     public Long getId() {
@@ -54,15 +65,15 @@ public class Analise {
     }
 
     public void setNota(Integer nota) {
+        if (nota < 1 || nota > 5) {
+            throw new IllegalArgumentException("Nota deve estar entre 1 e 5");
+        }
         this.nota = nota;
     }
 
-    public List<Analise> getAnalises() {
-        return analises;
-    }
-
-    public void setAnalises(List<Analise> analises) {
-        this.analises = analises;
+    @Override
+    public String toString() {
+        return "Analise{" + "id=" + id + ", filme=" + filme + ", texto=" + texto + ", nota=" + nota + '}';
     }
 
 }
